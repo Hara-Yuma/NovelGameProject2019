@@ -1,0 +1,51 @@
+\documentclass[a4paper]{jarticle}
+
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+
+\renewcommand\thefootnote{*\arabic{footnote}}
+
+\newcommand{\resp}[1]{\begin{flushright}文責：~#1\end{flushright}~\\}
+\newcommand{\MAIN}{false}
+
+\title{ビジュアルノベル制作班　活動報告書}
+\author{立命館コンピュータクラブ\\2019年度後期プロジェクト活動}
+\date{2020年2月10日}
+
+\begin{document}
+  \maketitle
+
+  \begin{center}
+    原 佑馬 \footnote{情報理工学部 情報理工学科 SAコース 2回生}
+  \end{center}
+
+  \newpage
+  \tableofcontents
+  \newpage
+
+  \input{src/overview.tex}
+  
+  \section{活動内容}
+
+    本プロジェクト活動では，Ren'pyについての説明を行う全体活動と，グループに別れて１つの作品を制作するグループ活動を行った．
+      
+    本章では，それぞれの活動について，各項目に分けて報告する．
+
+    \input{src/about.tex}
+
+    \input{src/basic.tex}
+
+    \input{src/scalability.tex}
+
+    \subsection{各グループ活動報告}
+
+      \input{src/group0.tex}
+
+      \input{src/group1.tex}
+
+      \input{src/group2.tex}
+
+    \input{src/gain.tex}
+
+    \input{src/outlook.tex}
+
+\end{document}
