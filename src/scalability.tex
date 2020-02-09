@@ -7,9 +7,152 @@
 \fi
 
 \section{Ren'pyの拡張性}
-  \resp{新藤　(名)}
+  \resp{新藤　尚輝}
 
-  % ここに文章
+　　ここでは，Ren'Pyの拡張性について次の順に触れていく．
+  
+  \begini{itemize}
+    \item  ステートメントの等価性
+    \item　台詞
+　　\item  選択肢
+    \item  画像の表示
+    \item  トランジション
+    \item  Jump
+    \item  Call
+
+  \end{itemize}
+
+  \subsubsection{ステートメントの等価性}
+   Ren'PyではPythonでスクリプト化できるように，各Ren'PyステートメントがPythonコードで記述できるようになっている．これは，通常，Python関数で構成されているが，ステートメントと同等のものを実行するPythonのパターンによることもある．
+  \subsubsection{台詞}
+   sayステートメントと同じものとして，次のように記述することができる．
+
+   ~
+   renpy.say(who,what,*args,**kwargs)
+   ~
+
+   who:発言するキャラクター，または，キャラクター名の文字列．Noneの場合ナレーターになる．
+   what:発言する文字列．
+   interact:この値が真の場合，ダイアログを表示するときにプレイヤーの入力を待つ．
+
+   以下のコードは，それぞれ同様の動作になる．
+
+   ~
+   e "Hello, world."
+   $ renpy.say(e, "Hello, world.")
+   $ e("Hello, world.")
+   ~
+
+  \subsubsection{選択肢}
+   menuステートメントにも等価なPython関数がある．
+  
+   ~
+   menu(items,interact=True,screen="choice")
+   renpy.display_menu(items, interact=True, screen="choice")
+   ~
+  
+   items:ここには2つの要素のタプルのリストが入る．各タプルの最初の要素はラベル．2つ目の要素は選択されたときに返えされる値．値がNoneの時は，最初の要素はキャプションに使用される．
+   interact:Falseにすると，選択肢を表示するが，インタラクションが実行されない．
+   screen:選択肢を表示するために使用されるスクリーンの名前．
+
+  \subsubsection{画像の表示}
+   image，scene，showとhideステートメントには，それぞれ等価なPython関数が存在している．
+
+    ~
+    renpy.get_at_list(name, layer=None)   
+    ~
+    レイヤー上のnameタグの画像に適用されている変換の地ストを返す．変換されていないときは空のリストを返し，画像が表示されていない時はNoneを返す．
+   レイヤーがNoneの時は，指定されたタグのデフォルトレイヤーを使用する．
+
+   hideについて:
+   ~
+renpy.hide(name, layer=None)
+   
+   ~
+   レイヤーから画像を非表示にする．hideステートメントと等価なPython関数．
+
+    name:非表示にする画像の名前．画像タグのみを使用し，そのタグのすべての画像が非表示になる．
+    layer:この関数が処理するレイヤー．Noneの時は，タグのデフォルトレイヤーを使用．
+
+    imageについて：
+    ~
+    renpy.image(name, d)
+    ~
+    画像を定義する．imageステートメントと等価なPython関数．この関数は初期化(init)ブロック内でのみ実行される．
+
+    name:表示する画像の名前．文字列を入力する．
+    d:その画像名に関連付けられるdisplayable．
+
+    sceneについて：
+    ~
+    renpy.scene(layer='master')
+    ~
+    レイヤーからすべてのdisplayableを除去する．表示する画像が与えられない時のsceneステートメントと等価．
+
+    sceneステートメントは
+    ~
+    scene bg beach
+    ~
+    のように表示するが，これは
+    ~
+    $ renpy.scene()
+    $ renpy.show("bg beach")
+    ~
+    と等価になる．
+
+    showについて：
+    ~
+    renpy.show(name, at_list=, []layer='master', what=None, zorder=0, tag=None, behind=[])
+    ~
+    レイヤーに画像を表示する．showステイトメントと等価．
+
+    name:表示する画像の名前．文字列を入力する．
+    at_list:画像に適用される変換のリスト．atプロパティと等価．
+    what:Noneでないならば，画像を探す代わりに表示されるdisplayableになる(show expressionステイトメントと等価)．この引数が与えられると，nameは，その画像とタグを関連付けるために使用される．
+    zorder：zorderプロパティと等価な整数．Noneの時は，zoderがあれば維持され，そうでなければ0に設定される．
+    tag：表示される画像の画像タグを指定するために使用される文字列．asプロパティと等価．
+    behind：背後に表示される画像タグの文字列のリスト．behindプロパティと等価．
+
+    ~
+    renpy.show_layer_at(at_list, layer='master', reset=True) 
+    ~
+    show layer layer(上記コードのlayer) at at_list(上記コードのat_list)ステートメントのPython関数での書き方．
+
+    reset：真の時は，変換状態が表示された時に，始めの状態にリセットされる．
+
+  \subsubsection{トランジション}
+   ~
+   renpy.with_statement(trans, always=False)
+   ~
+   トランジションを実行する．withステートメントと等価なPython関数．
+   この関数はユーザーがトランジションの中断を選択すると，Trueを返す．
+
+   trans:トランジション
+   always：Trueなら，ユーザーがトランジションを無効化していても常に実行する．
+
+  \subsubsection{Jump}
+    jumpステートメントはrenpy.jump関数になる．
+　　~
+    renpy.jump(label)
+    ~
+    現在のステートメントを終了し，指定されたラベルに遷移する．
+    
+  \subsubsection{Call}
+    コールステートメントはrenpy.call関数になる．
+
+    ~
+    renpy.call(label, *args, **kwargs) 
+    ~
+    現在のRen'Pyステートメントを終了し，指定されたラベルにジャンプする．ジャンプから戻ると，現在のステートメントに続くステートメントに制御が移る．
+
+    from_current：真の場合，制御は現在のステートメントに続くステートメントではなく現在のステートメントに戻る(現在のステートメントが二回実行される)．キーワード引数として渡す必要がある．
+
+    ~
+    renpy.return_statement() link
+    ~
+    現在のRen'Pyの呼び出しレベルからRen'Pyを返す．
+
+
 
 \expandafter\ifx\csname MAIN \endcsname\relax
   \end{document}
