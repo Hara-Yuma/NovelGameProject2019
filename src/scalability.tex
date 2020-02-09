@@ -1,16 +1,13 @@
-% Ren'pyの拡張性
-\expandafter\ifx\csname MAIN\endcsname\relax
-  \documentclass[a4paper]{jarticle}
-  \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
-  \newcommand{\resp}[1]{\begin{flushright}文責：~#1\end{flushright}~\\}
-  \begin{document}
-\fi
-
 \section{Ren'pyの拡張性}
-  \resp{新藤　(名)}
+  \resp{原　佑馬}
 
-  % ここに文章
+  Ren'pyスクリプトでは，"\$"で開始される行及び"python:"で指定されたブロックがPythonスクリプトとして扱われる．
 
-\expandafter\ifx\csname MAIN \endcsname\relax
-  \end{document}
-\fi
+  Ren'pyスクリプト内で使用されるPythonスクリプトでは，変数が共有され，また，ゲームデータのセーブと共に，これら変数の変更が記録される．
+
+  更に，Ren'pyでゲームの動作を定義するためのステートメントは，Pythonのコードによって記述されているため，
+  Ren'pyスクリプトに埋め込んだPythonコード内でもキャラクターの表示やラベル間遷移，発話等を行うことができる．
+
+  これにより，ユーザからの入力や，時刻，各フラグの値などによって発話するキャラクターや，
+  その内容を変化させるなど幅広い動作を実現することが可能となっている．
+  
