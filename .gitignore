@@ -3,4 +3,4 @@ game/saves
 **/*.log
 **/*.toc
 **/*.dvi
-**/*.pdf
+src/**/*.pdf
